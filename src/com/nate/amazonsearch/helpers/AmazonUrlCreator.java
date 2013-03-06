@@ -63,7 +63,7 @@ public class AmazonUrlCreator {
     	String paramString = URLEncodedUtils.format(params, "utf-8");
 	  
     	url += paramString;
-    	Log.i("unsigned url", url);
+    	//Log.i("unsigned url", url);
     	
         	SignedRequestsHelper signer;
         	
@@ -74,7 +74,7 @@ public class AmazonUrlCreator {
 				
 	        	signedUrl = signer.sign(url);
 	        	
-	        	Log.i("signned url", signedUrl);
+	        	//Log.i("signed url", signedUrl);
 			} catch (InvalidKeyException e) {
 				// if the key is invalid due to a programming error
 				throw new RuntimeException(e);

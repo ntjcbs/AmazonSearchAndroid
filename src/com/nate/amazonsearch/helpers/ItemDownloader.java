@@ -8,11 +8,9 @@
  */
 package com.nate.amazonsearch.helpers;
 
-import java.io.IOException;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import com.nate.amazonsearch.helpers.*;
 import com.nate.amazonsearch.interfaces.ItemUpdater;
 import com.nate.amazonsearch.models.Item;
 
@@ -92,16 +90,12 @@ public class ItemDownloader extends AsyncTask<Void, Void, Item[]> {
 			String url = urlMaker.searchProducts(searchQuery);
 
 			try {
-
 				resultXml = webServices.httpGetRequest(url);
 			} catch (IllegalStateException e) {
 				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			} 
 
 			if (resultXml != null) {
-
 				setSucessful(true);
 				downloadContent = resultXml;
 			}
@@ -111,13 +105,13 @@ public class ItemDownloader extends AsyncTask<Void, Void, Item[]> {
 
 		// process the downloaded information
 		if (isSucessful()) {
-
 			XmlParser parser = new XmlParser();
 			searchItems = parser.parseSearchXml(getContent());
-		} else {
 			
+		} else {
 			updater.onUpdateItemsFailed();
 		}
+		
 
 		return searchItems;
 	}

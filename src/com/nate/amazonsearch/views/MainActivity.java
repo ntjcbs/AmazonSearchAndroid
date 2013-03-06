@@ -9,6 +9,7 @@ import com.nate.amazonsearch.R;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Context;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
@@ -38,6 +39,7 @@ public class MainActivity extends Activity implements OnClickListener,
 	private Context context;
 	private String lastSearchString;
 	private ProgressBar progressSpinner;
+	private int cardHeight, cardWidth;
 
 	// onCreate is invoked when an activity is instantiated
 	@Override
@@ -65,6 +67,10 @@ public class MainActivity extends Activity implements OnClickListener,
 		itemGallery = (Gallery) findViewById(R.id.gallery);
 
 		lastSearchString = null;
+		
+		// calculate width and height of the cards
+		cardWidth = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 200, getResources().getDisplayMetrics());
+		cardHeight = (int) (cardWidth * 1.2);
 	}
 
 	// the search button invokes this method when it is clicked
@@ -198,6 +204,7 @@ public class MainActivity extends Activity implements OnClickListener,
 			return items[position];
 		}
 
+		@SuppressWarnings("deprecation")
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 
@@ -209,7 +216,8 @@ public class MainActivity extends Activity implements OnClickListener,
 			convertView = new View(context);
 			convertView = LayoutInflater.from(context).inflate(
 					R.layout.gallary_layout, null);
-			convertView.setLayoutParams(new Gallery.LayoutParams(250, 300));
+			
+			convertView.setLayoutParams(new Gallery.LayoutParams(cardWidth, cardHeight));
 
 			// set the view's fields
 			if (item != null) {

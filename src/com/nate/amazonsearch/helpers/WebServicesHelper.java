@@ -17,6 +17,7 @@ import java.net.URL;
 import java.net.URLConnection;
 
 import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -76,38 +77,48 @@ public class WebServicesHelper {
 	 * 
 	 * @param url
 	 * @return Complete contents of get response in a string
-	 * @throws IOException
-	 *             thrown if server fails to respond with a valid HTTP response
+	 * 
 	 * @throws IllegalStateException
 	 */
-	public String httpGetRequest(String url) throws IOException,
-			IllegalStateException {
+	public String httpGetRequest(String url) throws IllegalStateException {
 
 		if (url != null && url != "") {
 
 			HttpClient client = new DefaultHttpClient();
 			HttpGet request = new HttpGet(url);
-			HttpResponse response = client.execute(request);
-			InputStream content = response.getEntity().getContent();
+			HttpResponse response = null;
+			StringBuilder total = null;
+			BufferedReader buffReader = null;
 
-			// read content
-			BufferedReader reader = new BufferedReader(new InputStreamReader(
-					content));
-			StringBuilder total = new StringBuilder();
-			String line;
+			try {
+				response = client.execute(request);
+				InputStream content = response.getEntity().getContent();
 
-			while ((line = reader.readLine()) != null) {
+				// read content
+				buffReader = new BufferedReader(new InputStreamReader(content));
+				total = new StringBuilder();
+				String line;
 
-				total.append(line);
+				while ((line = buffReader.readLine()) != null) {
+					total.append(line);
+				}
+
+			} catch (IOException e) {
+				// ignore
+			} finally {
+
+				// clean up!
+				try {
+					buffReader.close();
+				} catch (IOException e) {
+					// ignore
+				}
 			}
-			
-			reader.close();
 
 			String getResponse = total.toString();
-			Log.i("response", getResponse);
+			// Log.i("response", getResponse);
 
 			return getResponse;
-
 		}
 		return null;
 	}
