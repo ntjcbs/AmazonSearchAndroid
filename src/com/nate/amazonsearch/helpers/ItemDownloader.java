@@ -6,7 +6,7 @@
  * 
  * DO NOT DISTRIBUTE
  */
-package com.nate.amazonsearch.models;
+package com.nate.amazonsearch.helpers;
 
 import java.io.IOException;
 

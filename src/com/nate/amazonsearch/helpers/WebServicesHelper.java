@@ -100,6 +100,8 @@ public class WebServicesHelper {
 
 				total.append(line);
 			}
+			
+			reader.close();
 
 			String getResponse = total.toString();
 			Log.i("response", getResponse);

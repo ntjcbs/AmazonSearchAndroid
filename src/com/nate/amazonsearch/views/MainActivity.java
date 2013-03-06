@@ -1,6 +1,7 @@
 package com.nate.amazonsearch.views;
 
 import com.nate.amazonsearch.models.*;
+import com.nate.amazonsearch.helpers.ItemDownloader;
 import com.nate.amazonsearch.helpers.WebServicesHelper;
 import com.nate.amazonsearch.interfaces.ItemUpdater;
 import com.nate.amazonsearch.R;
