@@ -17,7 +17,6 @@ import java.net.URL;
 import java.net.URLConnection;
 
 import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -27,7 +26,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.util.Log;
 
 /**
  * This class is used perform web services. Last updated: 1/9/2012
@@ -106,8 +104,6 @@ public class WebServicesHelper {
 			} catch (IOException e) {
 				// ignore
 			} finally {
-
-				// clean up!
 				try {
 					buffReader.close();
 				} catch (IOException e) {
@@ -132,37 +128,45 @@ public class WebServicesHelper {
 	 * @throws IOException
 	 *             If connection error
 	 */
-	public Bitmap DownloadBitmapFromUrl(String url) throws IOException {
+	public Bitmap DownloadBitmapFromUrl(String url) {
 
 		if (url != null && url != "") {
 
 			// use the BitmapFactory class to load an image from an InputStream
-			InputStream is = connect(url);
-			Bitmap temporaryBitmap = BitmapFactory.decodeStream(is);
-			is.close();
+			InputStream is = null;
+			Bitmap temporaryBitmap = null;
+			try {
+				is = connect(url);
+				temporaryBitmap = BitmapFactory.decodeStream(is);
+			} catch (MalformedURLException e) {
+				// ignore
+			} catch (IOException e) {
+				
+			} finally {
+				try {
+					is.close();
+				} catch (IOException e) {
+					// ignore
+				}
+			}
 
 			return temporaryBitmap;
-		} else {
 
+		} else {
 			return null;
 		}
 	}
 
-	private InputStream connect(String url) throws MalformedURLException {
+	private InputStream connect(String url) throws MalformedURLException,
+			IOException {
 
 		URL mUrl = new URL(url);
 		InputStream is = null;
 
-		try {
-
-			URLConnection ucon = mUrl.openConnection();
-			ucon.setConnectTimeout(1500);
-			ucon.setReadTimeout(3000);
-			is = ucon.getInputStream();
-		} catch (IOException e) {
-
-			e.printStackTrace();
-		}
+		URLConnection ucon = mUrl.openConnection();
+		ucon.setConnectTimeout(1500);
+		ucon.setReadTimeout(3000);
+		is = ucon.getInputStream();
 
 		return is;
 	}
